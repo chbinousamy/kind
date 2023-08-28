@@ -1,4 +1,4 @@
-name: Kind Cluster Testing
+name: Kind Cluster E2E Tests
 
 on:
   workflow_dispatch:
