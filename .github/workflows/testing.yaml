@@ -84,10 +84,10 @@ jobs:
           kubectl cluster-info
       - 
         name: run unit tests
-        run: make unit
+        run: sudo make unit
       - 
         name: run integration tests
-        run: make integration
+        run: sudo make integration
       - 
         name: Export logs
         if: always()
