@@ -84,7 +84,7 @@ jobs:
           kubectl cluster-info
       - 
         name: run e2e tests
-        run: ./hack/ci/e2e.sh
+        run: sudo ./hack/ci/e2e.sh
       - 
         name: Export logs
         if: always()
