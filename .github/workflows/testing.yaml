@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
       - 
         name: Install kind
-        run: make && sudo make install # INSTALL_DIR=/usr/local/bin
+        run: make build && sudo make install # INSTALL_DIR=/usr/local/bin
       -
         name: Install kubectl
         run: |
@@ -61,7 +61,7 @@ jobs:
         name: Create single node cluster
         if: ${{ matrix.deployment == 'singleNode' }}
         run: |
-          cat <<EOF | /usr/local/bin/kind create cluster -v7 --wait 1m --retain --config=-
+          cat <<EOF | kind create cluster -v7 --wait 1m --retain --config=-
           kind: Cluster
           apiVersion: kind.x-k8s.io/v1alpha4
           networking:
