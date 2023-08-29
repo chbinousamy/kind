@@ -61,6 +61,7 @@ jobs:
         name: Create single node cluster
         if: ${{ matrix.deployment == 'singleNode' }}
         run: |
+          which kind
           cat <<EOF | kind create cluster -v7 --wait 1m --retain --config=-
           kind: Cluster
           apiVersion: kind.x-k8s.io/v1alpha4
@@ -71,6 +72,7 @@ jobs:
         name: Create multi node cluster
         if: ${{ matrix.deployment == 'multiNode' }}
         run: |
+          which kind
           cat <<EOF | kind create cluster -v7 --wait 1m --retain --config=-
           kind: Cluster
           apiVersion: kind.x-k8s.io/v1alpha4
