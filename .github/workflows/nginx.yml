@@ -104,17 +104,6 @@ jobs:
             name: empty
             namespace: metallb-system
           EOF
-
-      - name: Deploy Echo Server
-        run: |
-          kubectl run echo --image=inanimate/echo-server --replicas=3 --port=8080
-          kubectl wait pod --all --for=condition=Ready -n default
-          kubectl expose deployment echo --type=LoadBalancer
-          kubectl get pods
-          kubectl get services
-          kubectl describe services echo
-          kubectl get services | grep echo | awk '{ print $4 }'
-          curl -m 5 http://$(kubectl get services | grep echo | awk '{ print $4 }'):80
           
       - name: Deploy nginx
         run: |
