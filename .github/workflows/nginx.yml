@@ -81,7 +81,7 @@ jobs:
           kubectl expose deployment nginx --type=NodePort --port=80
           kubectl get services
           kubectl describe services nginx
-          curl $(kubectl get services | grep nginx | awk '{ print $3 }'):80
+          curl -m 5 $(kubectl get services | grep nginx | awk '{ print $3 }'):80
 
       - name: Export logs
         if: always()
