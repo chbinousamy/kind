@@ -76,7 +76,7 @@ jobs:
 
       - name: Deploy nginx
         run: |
-          kubectl create deployment --image=nginx nginx-app
+          kubectl run nginx-app --image=nginx
           kubectl expose deployment nginx-app --type=NodePort --name=nginx-http
           kubectl describe services nginx-http
 
