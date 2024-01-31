@@ -84,7 +84,7 @@ jobs:
         run: |
           helm repo add metallb https://metallb.github.io/metallb
           helm install metallb metallb/metallb --namespace metallb-system --create-namespace
-          kubectl wait pod --all --for=condition=Ready
+          kubectl wait --for=condition=Ready pods --all -n metallb-system
           kubectl get pods -A
           cat <<EOF | kubectl apply -f -
           apiVersion: metallb.io/v1beta1
@@ -100,7 +100,7 @@ jobs:
       - name: Deploy nginx
         run: |
           kubectl create deployment nginx --image=nginx
-          kubectl wait pod --all --for=condition=Ready
+          kubectl wait pod --all --for=condition=Ready -n default
           kubectl expose deployment nginx --type=LoadBalancer
           kubectl get services
           kubectl describe services nginx
