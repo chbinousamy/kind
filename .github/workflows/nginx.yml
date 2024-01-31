@@ -95,7 +95,7 @@ jobs:
             namespace: metallb-system
           spec:
             addresses:
-            - 192.168.9.1-192.168.9.100
+            - 172.18.255.200-172.18.255.250
           EOF
 
       - name: Deploy nginx
