@@ -77,6 +77,7 @@ jobs:
       - name: Deploy nginx
         run: |
           kubectl run nginx-app --image=nginx --port=80
+          kubectl wait pod --all --for=condition=Ready
           kubectl get pods
           kubectl expose deployment nginx-app --type=NodePort
           kubectl describe services nginx-app
