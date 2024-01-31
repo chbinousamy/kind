@@ -73,6 +73,7 @@ jobs:
           kubectl wait --for=condition=ready pods --namespace=kube-system -l k8s-app=kube-dns
           kubectl get nodes -o wide
           kubectl get pods -A
+          ping -c 5 172.18.0.2
 
       - name: Install Helm
         run: |
