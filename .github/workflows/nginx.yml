@@ -114,7 +114,7 @@ jobs:
         run: |
           kubectl create deployment nginx --image=nginx --replicas=3 
           kubectl wait pod --all --for=condition=Ready -n default
-          kubectl expose deployment nginx --name=nginx --type=LoadBalancer
+          kubectl expose deployment nginx --name=nginx --type=LoadBalancer --port=80
           kubectl get pods
           kubectl get services
           kubectl describe services nginx
