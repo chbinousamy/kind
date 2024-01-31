@@ -76,11 +76,10 @@ jobs:
 
       - name: Deploy nginx
         run: |
-          kubectl run nginx-app --image=nginx --port=80
+          kubectl create deployment nginx --image=nginx
           kubectl wait pod --all --for=condition=Ready
-          kubectl get pods
-          kubectl expose deployment nginx-app --type=NodePort
-          kubectl describe services nginx-app
+          kubectl expose deployment nginx --type=LoadBalancer --port=8080
+          kubectl describe services nginx
 
       - name: Export logs
         if: always()
