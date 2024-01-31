@@ -99,10 +99,14 @@ jobs:
             - 172.18.255.200-172.18.255.250
           ---
           apiVersion: metallb.io/v1beta1
-          kind: L2Advertisement
+          kind: BGPAdvertisement
           metadata:
-            name: empty
+            name: external
             namespace: metallb-system
+          spec:
+            ipAddressPools:
+            - first-pool
+            aggregationLength: 24
           EOF
 
       - name: Check Network
