@@ -104,6 +104,11 @@ jobs:
             name: empty
             namespace: metallb-system
           EOF
+
+      - name: Check Network
+        run: |
+          ip a
+          ip route
           
       - name: Deploy nginx
         run: |
