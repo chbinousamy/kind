@@ -83,7 +83,7 @@ jobs:
       - name: Install and configure MetalLB
         run: |
           helm repo add metallb https://metallb.github.io/metallb
-          helm install metallb metallb/metallb
+          helm install metallb metallb/metallb --namespace metallb-system --create-namespace
           cat <<EOF | kubectl apply -f -
           apiVersion: metallb.io/v1beta1
           kind: IPAddressPool
