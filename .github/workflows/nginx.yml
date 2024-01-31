@@ -144,8 +144,8 @@ jobs:
             selector:
               app: http-echo
             ports:
-          # Default port used by the image
-          - port: 5678
+            # Default port used by the image
+            - port: 5678
           EOF
           kubectl wait pod --all --for=condition=Ready -n default
           # timeout 15s bash -c 'until kubectl get service/foo-service --output=jsonpath='{{ .status.loadBalancer }}' | grep "ingress"; do : ; done'
