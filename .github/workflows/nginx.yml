@@ -84,7 +84,7 @@ jobs:
         run: |
           helm repo add metallb https://metallb.github.io/metallb
           helm install metallb metallb/metallb --namespace metallb-system --create-namespace
-          kubectl wait --for=condition=ready pods --namespace=metallb-system
+          kubectl wait pod --all --for=condition=Ready
           kubectl get pods -A
           cat <<EOF | kubectl apply -f -
           apiVersion: metallb.io/v1beta1
