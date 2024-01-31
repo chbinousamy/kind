@@ -104,7 +104,29 @@ jobs:
             name: empty
             namespace: metallb-system
           EOF
-              
+
+      - name: Deploy Echo Server
+        run: |
+          kubectl run echo --image=inanimate/echo-server --replicas=3 --port=8080
+          kubectl wait pod --all --for=condition=Ready -n default
+          kubectl expose deployment echo --type=LoadBalancer
+          kubectl get pods
+          kubectl get services
+          kubectl describe services echo
+          kubectl get services | grep echo | awk '{ print $4 }'
+          curl -m 5 http://$(kubectl get services | grep echo | awk '{ print $4 }'):80
+          
+      - name: Deploy nginx
+        run: |
+          kubectl create deployment nginx --image=nginx --replicas=3 
+          kubectl wait pod --all --for=condition=Ready -n default
+          kubectl expose deployment nginx --port=80 --target-port=8000 --name=nginx --type=LoadBalancer
+          kubectl get pods
+          kubectl get services
+          kubectl describe services nginx
+          kubectl get services | grep nginx | awk '{ print $4 }'
+          curl -m 5 http://$(kubectl get services | grep nginx | awk '{ print $4 }'):80
+
       - name: Test LoadBalancer
         run: |
           cat <<EOF | kubectl apply -f -
@@ -151,19 +173,8 @@ jobs:
           timeout 20s bash -c 'until kubectl get service/foo-service --output=jsonpath='{.status.loadBalancer}' | grep "ingress"; do : ; done'
           kubectl get services
           LB_IP=$(kubectl get svc/foo-service -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
-          curl -m 5 ${LB_IP}:5678
+          curl -m 5 http://${LB_IP}:5678
           
-      - name: Deploy nginx
-        run: |
-          kubectl create deployment nginx --image=nginx --replicas=3
-          kubectl wait pod --all --for=condition=Ready -n default
-          kubectl expose deployment nginx --port=80 --target-port=8000 --name=nginx --type=LoadBalancer
-          kubectl get pods
-          kubectl get services
-          kubectl describe services nginx
-          kubectl get services | grep nginx | awk '{ print $4 }'
-          curl -m 5 $(kubectl get services | grep nginx | awk '{ print $4 }'):80
-
       - name: Export logs
         if: always()
         run: |
