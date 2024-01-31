@@ -85,18 +85,14 @@ jobs:
           helm repo add metallb https://metallb.github.io/metallb
           helm install metallb metallb/metallb
           cat <<EOF | kubectl apply -f -
-          apiVersion: v1
-          kind: ConfigMap
+          apiVersion: metallb.io/v1beta1
+          kind: IPAddressPool
           metadata:
+            name: first-pool
             namespace: metallb-system
-            name: config
-          data:
-          config: |
-            address-pools:
-            - name: default
-              protocol: layer2
-              addresses:
-              - 192.168.10.10-192.168.10.20
+          spec:
+            addresses:
+            - 192.168.9.1-192.168.9.100
           EOF
 
       - name: Deploy nginx
