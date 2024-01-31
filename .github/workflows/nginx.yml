@@ -1,4 +1,4 @@
-name: Nginx
+name: LoadBalancer
 
 on:
   workflow_dispatch:
@@ -13,8 +13,8 @@ permissions:
   contents: read
 
 jobs:
-  docker:
-    name: Docker
+  LoadBalancer:
+    name: LoadBalancer
     runs-on: ubuntu-20.04
     timeout-minutes: 30
     strategy:
