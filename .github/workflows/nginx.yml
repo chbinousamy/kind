@@ -97,6 +97,13 @@ jobs:
             addresses:
             - 172.18.255.200-172.18.255.250
           EOF
+          cat <<EOF | kubectl apply -f -
+          apiVersion: metallb.io/v1beta1
+          kind: L2Advertisement
+          metadata:
+            name: empty
+            namespace: metallb-system
+          EOF
 
       - name: Deploy nginx
         run: |
