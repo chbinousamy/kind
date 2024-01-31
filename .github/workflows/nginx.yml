@@ -148,9 +148,7 @@ jobs:
           - port: 5678
           EOF
           kubectl wait pod --all --for=condition=Ready -n default
-          until [ -n "$(kubectl get svc/foo-service -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')" ]; do
-            sleep 10
-          done
+          timeout 15s bash -c 'until kubectl get service/foo-service --output=jsonpath='{.status.loadBalancer}' | grep "ingress"; do : ; done'
           LB_IP=$(kubectl get svc/foo-service -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
           curl -m 5 ${LB_IP}:5678
           
