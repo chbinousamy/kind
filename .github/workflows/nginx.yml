@@ -74,11 +74,35 @@ jobs:
           kubectl get nodes -o wide
           kubectl get pods -A
 
+      - name: Install Helm
+        run: |
+          $ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+          chmod 700 get_helm.sh
+          ./get_helm.sh
+          helm repo add metallb https://metallb.github.io/metallb
+          helm install metallb metallb/metallb
+      - name: Configure Helm
+        run: |
+          cat <<EOF | kubectl apply -f -
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            namespace: metallb-system
+            name: config
+          data:
+          config: |
+            address-pools:
+            - name: default
+              protocol: layer2
+              addresses:
+              - 192.168.10.10-192.168.10.20
+          EOF
+
       - name: Deploy nginx
         run: |
           kubectl create deployment nginx --image=nginx
           kubectl wait pod --all --for=condition=Ready
-          kubectl expose deployment nginx --type=NodePort --port=80
+          kubectl expose deployment nginx --type=LoadBalancer
           kubectl get services
           kubectl describe services nginx
           curl -m 5 $(kubectl get services | grep nginx | awk '{ print $3 }'):80
