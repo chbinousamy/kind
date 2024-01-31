@@ -86,6 +86,7 @@ jobs:
           helm install metallb metallb/metallb --namespace metallb-system --create-namespace
           kubectl wait --for=condition=Ready pods --all -n metallb-system
           kubectl get pods -A
+          docker network inspect -f '{{.IPAM.Config}}' kind
           cat <<EOF | kubectl apply -f -
           apiVersion: metallb.io/v1beta1
           kind: IPAddressPool
