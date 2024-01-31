@@ -89,18 +89,20 @@ jobs:
           kubectl get pods -A
           docker network inspect -f '{{.IPAM.Config}}' kind
           cat <<EOF | kubectl apply -f -
-          apiVersion: v1
-          kind: ConfigMap
+          apiVersion: metallb.io/v1beta1
+          kind: IPAddressPool
           metadata:
+            name: first-pool
             namespace: metallb-system
-            name: config
-          data:
-            config: |
-              address-pools:
-              - name: default
-                protocol: layer2
-                addresses:
-                - 172.18.255.200-172.18.255.250
+          spec:
+            addresses:
+            - 172.18.255.200-172.18.255.250
+          ---
+          apiVersion: metallb.io/v1beta1
+          kind: L2Advertisement
+          metadata:
+            name: empty
+            namespace: metallb-system
           EOF
               
       - name: Test LoadBalancer
@@ -147,6 +149,7 @@ jobs:
           kubectl wait pod --all --for=condition=Ready -n default
           kubectl get services
           timeout 20s bash -c 'until kubectl get service/foo-service --output=jsonpath='{.status.loadBalancer}' | grep "ingress"; do : ; done'
+          kubectl get services
           LB_IP=$(kubectl get svc/foo-service -o=jsonpath='{.status.loadBalancer.ingress[0].ip}')
           curl -m 5 ${LB_IP}:5678
           
