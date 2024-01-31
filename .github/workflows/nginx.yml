@@ -96,7 +96,7 @@ jobs:
             namespace: metallb-system
           spec:
             addresses:
-            - 172.18.255.200-172.18.255.250
+            - 172.18.255.200/24
           ---
           apiVersion: metallb.io/v1beta1
           kind: BGPAdvertisement
