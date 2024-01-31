@@ -79,6 +79,7 @@ jobs:
           kubectl create deployment nginx --image=nginx
           kubectl wait pod --all --for=condition=Ready
           kubectl expose deployment nginx --type=NodePort --port=80
+          kubectl get services
           kubectl describe services nginx
 
       - name: Export logs
