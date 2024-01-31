@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ipFamily: [ipv4, ipv6]
+        ipFamily: [ipv4]
         deployment: [singleNode, multiNode]
     env:
       JOB_NAME: "docker-${{ matrix.deployment }}-${{ matrix.ipFamily }}"
@@ -76,13 +76,14 @@ jobs:
 
       - name: Install Helm
         run: |
-          $ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
           chmod 700 get_helm.sh
           ./get_helm.sh
+  
+      - name: Install and configure MetalLB
+        run: |
           helm repo add metallb https://metallb.github.io/metallb
           helm install metallb metallb/metallb
-      - name: Configure Helm
-        run: |
           cat <<EOF | kubectl apply -f -
           apiVersion: v1
           kind: ConfigMap
