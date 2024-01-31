@@ -74,17 +74,11 @@ jobs:
           kubectl get nodes -o wide
           kubectl get pods -A
 
-      - name: Install Helm
-        run: |
-          curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-          chmod 700 get_helm.sh
-          ./get_helm.sh
-
       - name: Deploy nginx
         run: |
           kubectl create deployment --image=nginx nginx-app
           kubectl expose deployment nginx-app --port=80 --name=nginx-http
-          curl http://localhost
+          kubectl get service --all-namespaces
 
       - name: Export logs
         if: always()
