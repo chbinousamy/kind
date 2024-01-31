@@ -99,12 +99,13 @@ jobs:
 
       - name: Deploy nginx
         run: |
-          kubectl create deployment nginx --image=nginx
+          kubectl create deployment nginx --image=nginx --replicas=3
           kubectl wait pod --all --for=condition=Ready -n default
           kubectl expose deployment nginx --port=80 --target-port=8000 --name=nginx --type=LoadBalancer
+          kubectl get pods
           kubectl get services
           kubectl describe services nginx
-          curl -m 5 $(kubectl get services | grep nginx | awk '{ print $3 }'):80
+          curl -m 5 $(kubectl get services | grep nginx | awk '{ print $4 }'):80
 
       - name: Export logs
         if: always()
